@@ -1,0 +1,79 @@
+
+.head_bg{
+    height:25vh;
+    background-color: #5682a3;
+}
+.inputsFor{
+    margin:80px 30px;
+}
+.Registration,.Login{
+    position:absolute;
+    height:600px;
+    width:500px;
+    top:210px;
+    right:40%;
+    background-color:#d6d6d6;
+    border-radius: 10px;
+    box-shadow: 4px 0px 26px 2px rgba(68, 90, 107, 0.1);
+    
+}
+
+.input{
+    display:flex;
+    margin: 30px auto;
+    flex-direction: column;
+    width:250px;
+    border-radius:4px;
+    padding:12px 30px 12px 10px;
+    border:1px solid #ffffff;
+    box-sizing: border-box;
+    font-size: 18px;
+    
+}
+
+
+.Login_bg{
+    height:75vh;
+    background-color: #eaebf3;
+}
+.ButtonsControl{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top:30px;
+}
+
+.buttons{
+    
+   
+    padding-top:12px;
+    font-size: 18px;
+    color:#eaeaea;
+    width:120px;
+    height:40px;
+    user-select: none; 
+    background-color:#a6a5a9;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.healperbox{
+    color:#fff;
+    background-color: #95b7d0;
+    margin:30px 70px 30px 80px;
+    padding: 10px;
+    border-radius: 4px;
+}
+.link_to_regist{
+    color:#1a1a23;
+    cursor: pointer;
+    margin:0 5px;
+    padding:2px 0;
+    text-decoration:underline;
+}
+.buttons:hover{
+    background-color:#8a898c
+}
+.buttons:active{
+    background-color:#838386;
+}
