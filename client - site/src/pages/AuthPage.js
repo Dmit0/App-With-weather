@@ -1,10 +1,16 @@
 import React,{useState,useEffect,/*useCallback,useContext*/} from 'react';
 import {connect} from 'react-redux'
-import {change_regist,show_loader,hide_loader,show_error,hide_error,log_in,log_out} from '../redux/actions'
+import {change_regist,show_loader,hide_loader,show_error,log_in} from '../redux/actions'
+import {Spinner} from '../components/show_components/spinner'
+import {Registration} from '../components/jsx/registration'
+import {Login} from '../components/jsx/login'
+import {Errors} from '../components/show_components/errors'
 import '../css/loginpage.css' 
 
 
-  const AuthPage=({application_state,change_regist,show_loader,hide_loader,log_in})=>{
+
+
+  const AuthPage=({application_state,show_loader,show_error,hide_loader,log_in})=>{
 
   const [Form,setForm]=useState({
       email:"",
@@ -13,18 +19,18 @@ import '../css/loginpage.css'
       password_again:""
   })
   const [needregist,isNeedRegist]=useState(false)
+
+  const errors=application_state.errors
   
   const changHandler = (event)=>{
     setForm({...Form,[event.target.name]:event.target.value})
   }
   const is_show_regist=()=>{
     setForm({email:"", name:"",password:"", password_again:""})
-    //change_regist(!application_state.show_registration_window )
     isNeedRegist(!needregist)
   }
   const registerHeandler=async ()=>{
     show_loader()
-      try{
         let response = await fetch('api/auth/register',{
             method:"POST",
             headers:{'Content-Type': 'application/json;charset=utf-8'},
@@ -36,16 +42,18 @@ import '../css/loginpage.css'
         })
         let result = await response.json()
         await hide_loader()
-        is_show_regist();        
-        console.log(result.message)      
-      }catch(e){
-        hide_loader()
-      }
+        
+        if(!response.ok){
+            check(result)
+            return
+        }
+        is_show_regist();  
+
   }
   
   const loginHeandler=async ()=>{ 
     show_loader()  
-    try{
+    
       let response = await fetch('api/auth/login',{
           method:"POST",
           headers:{'Content-Type': 'application/json;charset=utf-8'},
@@ -55,64 +63,59 @@ import '../css/loginpage.css'
           })
       })
       let result = await response.json();
+      await hide_loader()
+      if(!response.ok){
+          check(result)
+          return  
+    }
       localStorage.setItem("UserInfo",JSON.stringify({token:result.token,userId:result.userId}));
-      hide_loader();
       log_in(result.token,result.userId)
       
-    }catch(e){hide_loader()}
-    
-    
+   
+}
+
+
+const check = (result) =>{
+    if(result.errors){
+        for(let i=0;i<result.errors.length;i++){
+        show_error(result.errors[i].msg)
+    }
+    }
+    else {
+        show_error(result.message)
+    }
     
 }
+
+
 useEffect(()=>{
                 const data=JSON.parse(localStorage.getItem("UserInfo"))
                 if( data && data.token){
                     log_in(data.token,data.userId)
                 }
             },[log_in])
-
     return(
         <> 
-            <div className="head_bg ">
+            
+            <div className="head_bg "> 
+                { errors 
+                ? errors.map((error)=><Errors text={error} key={error.length + Date.now()}/>)
+                : null}
                 <div className="info_list"> 
                    Weather application
                    <p>App that help you with life time forecast</p>
                    <p className="marg">You need to log In  </p>
                    <p>If you wont to use app</p>
                 </div>
-                {needregist 
-            ?
-            
-            <div className="Registration">
-                <div className="inputsFor">
-                    <input type="text"  value={Form.email} className="input" placeholder="Email" name="email" onChange={changHandler}/>
-                    <input type="text"  value={Form.name} className="input" placeholder="Name"  name="name" onChange={changHandler}/>
-                    <input type="password"  value={Form.password} className="input" placeholder="Password" name="password" onChange={changHandler}/>
-                    <input type="password"  value={Form.password_again} className="input" placeholder="Password again" name="password_again" onChange={changHandler}/>
-                </div>
-               
-                <div className="ButtonsControl">  
-                    <span className="buttons" onClick={is_show_regist}>Return</span>
-                    <span className="buttons"  onClick={registerHeandler}>Registrate</span> 
-                </div>
-            </div>
-            :<div className="Login">
-                <div className="inputsFor">
-                    <input type="text" className="input" value={Form.email} placeholder="Email" name="email" onChange={changHandler}/>
-                    <input type="password" className="input" value={Form.password} placeholder="Password" name="password" onChange={changHandler}/>
-                </div>
-                <span className="healperbox">If you dont have account you need to <span className="link_to_regist" onClick={is_show_regist}>registrate</span></span>
-                <div className="ButtonsControl">
-                    <span className="buttons"  onClick={loginHeandler}>Log in</span>   
-                </div>
-            </div>
+
+                {application_state.loading 
+                ? <Spinner/>  
+                :needregist 
+                     ? <Registration changHandler={changHandler} disable={!!errors.length} is_show_regist={is_show_regist} registerHeandler={registerHeandler} {...Form} />
+                     : <Login changHandler={changHandler} disable={!!errors.length} is_show_regist={is_show_regist} loginHeandler={loginHeandler} {...Form}/>
             }
             </div>
-            
-           
-           
-            
-        </>
+  </>
     )
 }
 
@@ -127,10 +130,6 @@ const mapDispatchToProps={
     show_loader,
     hide_loader,
     show_error,
-    hide_error,
-    log_in,
-    log_out
-
-
+    log_in
 }
 export default connect(mapStateToProps,mapDispatchToProps)(AuthPage)
