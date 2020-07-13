@@ -12,10 +12,20 @@ export const hide_loader=()=>{
     }
 }
 
-export const show_error=()=>{
-    return{
-        type:STATES_OF_APPLICATION.SHOW_ERORR,
+export const show_error=(errors)=>{
+
+    return dispatch=>{
+        dispatch({
+            type:STATES_OF_APPLICATION.SHOW_ERORR,
+            payload:errors
+        })
+        
+        setTimeout(()=>{
+            dispatch(hide_error())
+         },3000)
     }
+
+    
 }
 
 export const hide_error=()=>{
@@ -45,7 +55,10 @@ export const log_in=(token,userId)=>{
 
 
 export const log_out=()=>{
-    return{
-        type:USER.LOG_OUT,
+    return dispatch=>{
+        localStorage.removeItem("UserInfo");
+        dispatch({
+            type:USER.LOG_OUT
+        })
     }
 }
