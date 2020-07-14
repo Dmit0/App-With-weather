@@ -1,6 +1,6 @@
 import React,{useState,useEffect,/*useCallback,useContext*/} from 'react';
-import {connect} from 'react-redux'
-import {change_regist,show_loader,hide_loader,show_error,log_in} from '../redux/actions'
+import {useSelector,useDispatch} from 'react-redux'
+import {show_loader,hide_loader,show_error,log_in} from '../redux/actions'
 import {Spinner} from '../components/show_components/spinner'
 import {Registration} from '../components/jsx/registration'
 import {Login} from '../components/jsx/login'
@@ -10,7 +10,7 @@ import '../css/loginpage.css'
 
 
 
-  const AuthPage=({application_state,show_loader,show_error,hide_loader,log_in})=>{
+  export const AuthPage=()=>{
 
   const [Form,setForm]=useState({
       email:"",
@@ -20,7 +20,14 @@ import '../css/loginpage.css'
   })
   const [needregist,isNeedRegist]=useState(false)
 
-  const errors=application_state.errors
+  const {errors,loading}=useSelector((state)=>{
+    return {
+        loading:state.app.loading,
+        errors:state.app.errors
+    }
+  })
+
+  const dispatch=useDispatch();
   
   const changHandler = (event)=>{
     setForm({...Form,[event.target.name]:event.target.value})
@@ -30,7 +37,7 @@ import '../css/loginpage.css'
     isNeedRegist(!needregist)
   }
   const registerHeandler=async ()=>{
-    show_loader()
+    dispatch(show_loader())
         let response = await fetch('api/auth/register',{
             method:"POST",
             headers:{'Content-Type': 'application/json;charset=utf-8'},
@@ -41,10 +48,10 @@ import '../css/loginpage.css'
             })
         })
         let result = await response.json()
-        await hide_loader()
+        await dispatch(hide_loader())
         
         if(!response.ok){
-            check(result)
+            check(result) 
             return
         }
         is_show_regist();  
@@ -52,7 +59,7 @@ import '../css/loginpage.css'
   }
   
   const loginHeandler=async ()=>{ 
-    show_loader()  
+    dispatch(show_loader())
     
       let response = await fetch('api/auth/login',{
           method:"POST",
@@ -63,55 +70,55 @@ import '../css/loginpage.css'
           })
       })
       let result = await response.json();
-      await hide_loader()
+      await dispatch(hide_loader())
       if(!response.ok){
-          check(result)
+        check(result) 
           return  
     }
       localStorage.setItem("UserInfo",JSON.stringify({token:result.token,userId:result.userId}));
-      log_in(result.token,result.userId)
-      
-   
+      dispatch(log_in(result.token,result.userId))
 }
-
 
 const check = (result) =>{
     if(result.errors){
         for(let i=0;i<result.errors.length;i++){
-        show_error(result.errors[i].msg)
+        dispatch(show_error(result.errors[i].msg))
     }
     }
     else {
-        show_error(result.message)
+        dispatch(show_error(result.message))
     }
     
 }
 
-
 useEffect(()=>{
                 const data=JSON.parse(localStorage.getItem("UserInfo"))
                 if( data && data.token){
-                    log_in(data.token,data.userId)
+                    dispatch(log_in(data.token,data.userId))
                 }
-            },[log_in])
+
+            })
+    
+
+            
     return(
         <> 
             
             <div className="head_bg "> 
-                { errors 
-                ? errors.map((error)=><Errors text={error} key={error.length + Date.now()}/>)
-                : null}
+                {errors 
+                ? errors.map((error)=><Errors text={error} key={error.length+Date.now()}/>)
+                :null
+                }
                 <div className="info_list"> 
                    Weather application
                    <p>App that help you with life time forecast</p>
                    <p className="marg">You need to log In  </p>
                    <p>If you wont to use app</p>
                 </div>
-
-                {application_state.loading 
+                {loading 
                 ? <Spinner/>  
                 :needregist 
-                     ? <Registration changHandler={changHandler} disable={!!errors.length} is_show_regist={is_show_regist} registerHeandler={registerHeandler} {...Form} />
+                     ? <Registration changHandler={changHandler} disable={!!errors.length}  is_show_regist={is_show_regist} registerHeandler={registerHeandler} {...Form} />
                      : <Login changHandler={changHandler} disable={!!errors.length} is_show_regist={is_show_regist} loginHeandler={loginHeandler} {...Form}/>
             }
             </div>
@@ -119,17 +126,5 @@ useEffect(()=>{
     )
 }
 
-const mapStateToProps=(state)=>{
-    return {
-        application_state:state.app
-    }
-}
 
-const mapDispatchToProps={
-    change_regist,
-    show_loader,
-    hide_loader,
-    show_error,
-    log_in
-}
-export default connect(mapStateToProps,mapDispatchToProps)(AuthPage)
+
