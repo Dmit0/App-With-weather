@@ -1,4 +1,4 @@
-import {USER,STATES_OF_APPLICATION,REGISTRATION_FORM} from './types'
+import {USER,STATES_OF_APPLICATION,REGISTRATION_FORM,SEARCH_CITY,CLEAN_SEARCH} from './types'
 
 export const show_loader=()=>{
     return{
@@ -21,16 +21,16 @@ export const show_error=(errors)=>{
         })
         
         setTimeout(()=>{
-            dispatch(hide_error())
-         },3000)
+            dispatch(hide_error(errors))
+         },2000)
     }
 
     
 }
 
-export const hide_error=()=>{
+export const hide_error=(errors)=>{
     return{
-        type:STATES_OF_APPLICATION.HIDE_ERROR,
+        type:STATES_OF_APPLICATION.HIDE_ERROR
     }
 }
 
@@ -60,5 +60,17 @@ export const log_out=()=>{
         dispatch({
             type:USER.LOG_OUT
         })
+    }
+}
+
+export const search=(city)=>{
+    return{
+        type:SEARCH_CITY,
+        payload:city
+    }
+}
+export const cleanSearch=()=>{
+    return{
+        type:CLEAN_SEARCH
     }
 }
