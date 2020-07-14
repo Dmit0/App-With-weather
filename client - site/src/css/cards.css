@@ -1,0 +1,19 @@
+.card_info{
+    max-width: 80%;
+    height:550px;
+    margin:100px auto;
+}
+.Weather{
+    margin:15px 0 30px 10px;
+    font-size:20px;
+}
+.jum{
+    max-width:80%;
+    margin:100px auto;
+}
+.title{
+    margin-bottom:40px;
+}
+.return{
+    margin-top: 30px;
+}
