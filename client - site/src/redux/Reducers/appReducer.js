@@ -6,6 +6,8 @@ const initialState={
     show_registration_window:false
 }
 
+
+
 export const appReducer=(state=initialState,action)=>{
     switch (action.type){
         case STATES_OF_APPLICATION.SHOW_LOADING:
@@ -15,7 +17,7 @@ export const appReducer=(state=initialState,action)=>{
         case STATES_OF_APPLICATION.SHOW_ERORR:
             return {...state,errors:[...state.errors,action.payload]}
         case STATES_OF_APPLICATION.HIDE_ERROR:
-            return {...state,errors:[]}
+            return  {...state,errors:[]}
         case STATES_OF_APPLICATION.CHANGE_STATE_REGIST:
             return {...state,show_registration_window:action.payload.state_regist}
         default:return state
