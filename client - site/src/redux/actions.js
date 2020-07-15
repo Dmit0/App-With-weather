@@ -1,4 +1,4 @@
-import {USER,STATES_OF_APPLICATION,REGISTRATION_FORM,SEARCH_CITY,CLEAN_SEARCH} from './types'
+import {USER,STATES_OF_APPLICATION,REGISTRATION_FORM,SEARCH_CITY,CLEAN_SEARCH,ADD_CITY,REMOVE_CITY} from './types'
 
 export const show_loader=()=>{
     return{
@@ -72,5 +72,19 @@ export const search=(city)=>{
 export const cleanSearch=()=>{
     return{
         type:CLEAN_SEARCH
+    }
+}
+
+export const addCity=(id,name)=>{
+    return{
+        type:ADD_CITY,
+        payload:{id,name}
+    }
+}
+
+export const removeCity=(id)=>{
+    return{
+        type:REMOVE_CITY,
+        payload:id
     }
 }
