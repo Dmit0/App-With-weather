@@ -1,13 +1,17 @@
 import React,{useState} from 'react';
 import {Link} from 'react-router-dom'
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import {log_out,search} from '../redux/actions'
+import {DomLovedCites} from '../components/jsx/domLovedCites'
 
 
 
 export const DomWeatherPage=()=>{
    const [input,setInput]=useState(null)
 
+   const currentCity=useSelector((state)=>{
+      return state.weather.savedCites
+    })
    const dispatch=useDispatch();
 
    const onSearch=async()=>{
@@ -20,6 +24,7 @@ export const DomWeatherPage=()=>{
        dispatch(log_out())
     }
     return(
+       <>
         <div className="navbar navbar-light bg-light d-flex justify-content-between"> 
                 <Link to=""><span className="navbar-brand ">WEATHER APP</span></Link>
                 <div className="d-flex">
@@ -28,6 +33,16 @@ export const DomWeatherPage=()=>{
                 </div> 
                 <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={onLogout}>logout</button>
        </div>
+       <div className="Main-Content">
+         <div className="Block-Star">
+         {currentCity.length 
+         ?currentCity.map((city)=><DomLovedCites name={city.name} key={city.id}/>)
+         :<span>the is no stared city at the moment</span>
+         }
+         </div>
+         <div></div>
+       </div>
+       </>
  
 
     )

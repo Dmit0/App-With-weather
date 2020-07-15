@@ -2,8 +2,8 @@ import React,{useState,useEffect,/*useCallback,useContext*/} from 'react';
 import {useSelector,useDispatch} from 'react-redux'
 import {show_loader,hide_loader,show_error,log_in} from '../redux/actions'
 import {Spinner} from '../components/show_components/spinner'
-import {Registration} from '../components/jsx/registration'
-import {Login} from '../components/jsx/login'
+import {Registration} from '../components/jsx/auth/registration'
+import {Login} from '../components/jsx/auth/login'
 import {Errors} from '../components/show_components/errors'
 import '../css/loginpage.css' 
 
