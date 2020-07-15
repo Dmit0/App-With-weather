@@ -1,11 +1,18 @@
 .card_info{
-    max-width: 80%;
-    height:550px;
-    margin:100px auto;
+    
+    height:500px;
+    width:300px;
+    margin:50px;
+}
+.wrapper{
+    display:flex;
+    margin-top:100px;
+    justify-content: center;
 }
 .Weather{
     margin:15px 0 30px 10px;
     font-size:20px;
+    
 }
 .jum{
     max-width:80%;
