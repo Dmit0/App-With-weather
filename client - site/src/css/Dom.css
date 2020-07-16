@@ -1,0 +1,35 @@
+.Main-Content{
+    display:flex;
+    margin:150px auto;
+    justify-content: center;
+}
+.Header-Select{
+    font-size: 30px;
+}
+
+.Block-Star{
+    display:flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.LovedCity{
+    width:300px;
+    height:50px;
+    color: #818bd2;
+    margin:20px 20px 20px 0;
+    padding:10px 20px;
+    border-radius: 6px;
+    font-size:20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.LovedCity_active{
+    background-color: #626aaf;
+    color:#fff;
+}
+
+.main-info{
+    font-size:30px;
+}
