@@ -1,4 +1,4 @@
-import {USER,STATES_OF_APPLICATION,REGISTRATION_FORM,SEARCH_CITY,CLEAN_SEARCH,ADD_CITY,REMOVE_CITY} from './types'
+import {USER,STATES_OF_APPLICATION,REGISTRATION_FORM,SEARCH_CITY,CLEAN_SEARCH,ADD_CITY,REMOVE_CITY,SEARCH_LOVE_CITY,CLEAN_LOVE_CITY,STAR_CITIES} from './types'
 
 export const show_loader=()=>{
     return{
@@ -44,13 +44,21 @@ export const change_regist=(state_regist)=>{
 
 
 export const log_in=(token,userId)=>{
-    return{
-        type:USER.LOG_IN,
-        payload:{
+    return async dispatch=>{
+        dispatch({type:USER.LOG_IN, payload:{
             token,
             userId
+        }})    
+        let response = await fetch('/api/cities/',{ headers:{Authorization:`Bearer ${token}`}})
+        let result = await response.json();
+        if(!response.ok){
+            return
         }
+        for(let city of result){
+            dispatch(starCities(city.id,city.name))
+          }
     }
+   
 }
 
 
@@ -86,5 +94,25 @@ export const removeCity=(id)=>{
     return{
         type:REMOVE_CITY,
         payload:id
+    }
+}
+
+export const searchLoveCity=(city)=>{
+    return{
+        type:SEARCH_LOVE_CITY,
+        payload:city
+    }
+}
+
+export const cleanLoveCity=()=>{
+    return{
+        type:CLEAN_LOVE_CITY,
+    }
+}
+export const starCities=(id,name)=>{
+    
+    return{
+        type:STAR_CITIES,
+        payload:{id,name}
     }
 }

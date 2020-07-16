@@ -1,4 +1,4 @@
-import {STATES_OF_APPLICATION} from '../types'
+import {USER,STATES_OF_APPLICATION} from '../types'
 
 const initialState={
     loading:false,
@@ -10,6 +10,8 @@ const initialState={
 
 export const appReducer=(state=initialState,action)=>{
     switch (action.type){
+        case USER.LOG_OUT:
+            return initialState
         case STATES_OF_APPLICATION.SHOW_LOADING:
             return {...state,loading:true}
         case STATES_OF_APPLICATION.HIDE_LOADING:

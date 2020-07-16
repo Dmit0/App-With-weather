@@ -10,7 +10,7 @@ export const user_actionReducer=(state=initialState,action)=>{
         case USER.LOG_IN:
             return {...state,token:action.payload.token,userId:action.payload.userId}
         case USER.LOG_OUT:
-            return {...state,token:null,userId:null}
+            return initialState
         default:return state
     }
 }
