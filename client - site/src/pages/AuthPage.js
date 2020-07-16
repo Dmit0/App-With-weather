@@ -23,7 +23,7 @@ import '../css/loginpage.css'
   const {errors,loading}=useSelector((state)=>{
     return {
         loading:state.app.loading,
-        errors:state.app.errors
+        errors:state.app.errors,
     }
   })
 
@@ -70,14 +70,17 @@ import '../css/loginpage.css'
           })
       })
       let result = await response.json();
+     
       await dispatch(hide_loader())
       if(!response.ok){
         check(result) 
           return  
     }
-      localStorage.setItem("UserInfo",JSON.stringify({token:result.token,userId:result.userId}));
-      dispatch(log_in(result.token,result.userId))
+        localStorage.setItem("UserInfo",JSON.stringify({token:result.token,userId:result.userId}));
+        dispatch(log_in(result.token,result.userId))
 }
+
+
 
 const check = (result) =>{
     if(result.errors){
@@ -97,7 +100,7 @@ useEffect(()=>{
                     dispatch(log_in(data.token,data.userId))
                 }
 
-            })
+            },[dispatch])
     
 
             
