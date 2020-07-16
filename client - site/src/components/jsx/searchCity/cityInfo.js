@@ -11,7 +11,7 @@ export const  CityInfo = ({city,checked,onToggle}) => {
     return (
         <div className="card bg-light  card_info ">
             <div className="card-header d-flex justify-content-between">{city.name} 
-            <input type="checkbox" checked={checked} onChange={(e)=>onToggle(city.id,city.name,e.target.checked)}></input>
+            <input type="checkbox" checked={checked} onChange={(e)=>onToggle(city.id,city.name,e.target.checked,city.coord)}></input>
             </div>
                 <div className="card-body">
                 <div className="Weather">Current weather is {convert(city.main.temp)} degree</div>
