@@ -32,7 +32,7 @@ router.post('/remove',auth,async(req,res)=>{
 
 
    try  {
-       await City.deleteOne({id})
+       await City.deleteOne({id:id,owner:req.user.userId})
        res.status(201).json({message:"el was deleted"})
     }
    catch(e){console.log(35 + e.message)}
